@@ -1,0 +1,13 @@
+apps:
+  port: "3000"
+  host: "127.0.0.1"
+databases:
+  engine: "mysql"
+  username: "root" #username to use localy setup
+  password: "" #password to use localy setup
+  port: "3306"
+  host: "localhost"
+  maximum_connection: 20
+jwt:
+  secret_key: "1a8c926a-35d3-451f-99c2-964cf0666d65"
+  encrypt: "HS256"

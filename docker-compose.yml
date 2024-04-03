@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  mysql_product:
+    container_name: product_db
+    image: mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: Yes
+    ports:
+      - 3307:3306
+    networks:
+      - diksha_product_network
+  apps:
+    container_name: product_service
+    image: diksha_product_service
+    ports:
+      - 4000:4000
+    depends_on:
+      - mysql_product
+    environment:
+      APP_ENV: Docker
+    networks:
+      - diksha_product_network
+
+networks:
+  diksha_product_network:
+    name: diksha_product_network
+    driver: bridge
