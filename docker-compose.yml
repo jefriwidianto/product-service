@@ -17,6 +17,7 @@ services:
       - 4000:4000
     depends_on:
       - mysql_product
+    restart: on-failure
     environment:
       APP_ENV: Docker
     networks:
