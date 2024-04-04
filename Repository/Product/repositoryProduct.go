@@ -10,7 +10,7 @@ import (
 func (p *product) ListProduct(ctx context.Context, param Request.ListParam) (resp Response.RespDataListProduct, err error) {
 	var data Response.RespListProduct
 
-	query := `SELECT id, title, description, price, stock FROM t_product ORDER BY title ASC LIMIT ? OFFSET ?`
+	query := `SELECT id, title, description, price, stock FROM t_product WHERE stock > 0 ORDER BY title ASC LIMIT ? OFFSET ?`
 	rows, err := Config.DATABASE_MAIN.Get().QueryContext(ctx, query, param.Limit, param.Offset)
 	if err != nil {
 		return
@@ -34,5 +34,20 @@ func (p *product) ListProduct(ctx context.Context, param Request.ListParam) (res
 func countDataListProduct(ctx context.Context) (count int64, err error) {
 	query := `SELECT COUNT(id) FROM t_product`
 	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query).Scan(&count)
+	return
+}
+
+func (p *product) CheckExistsProductId(ctx context.Context, id string) (exists bool, err error) {
+	query := `SELECT EXISTS (SELECT 1 FROM t_product WHERE id = ? AND stock > 0) AS "exists"`
+	err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, id).Scan(&exists)
+	return
+}
+
+func (p *product) DetailProduct(ctx context.Context, id string) (res Response.RespDetailProduct, err error) {
+	query := `SELECT id, title, description, price, stock FROM t_product WHERE id = ? AND stock > 0`
+	if err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, id).Scan(&res.Id, &res.Title, &res.Description,
+		&res.Price, &res.Stock); err != nil {
+		return
+	}
 	return
 }

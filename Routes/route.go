@@ -16,6 +16,7 @@ func (app *Routes) CollectRoutes(e *echo.Echo, host, port string) {
 	appRoutes := e
 
 	appRoutes.GET("/list-product", app.Controller.ListProduct)
+	appRoutes.GET("/detail-product/:id", app.Controller.DetailProduct)
 
 	app.Log.Fatal(appRoutes.Start(fmt.Sprintf("%s:%s", host, port)).Error())
 }
