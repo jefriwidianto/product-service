@@ -3,6 +3,7 @@ package Product
 import (
 	"context"
 	"product-service/Config"
+	pb "product-service/Controller/Dto/Proto"
 	"product-service/Controller/Dto/Request"
 	"product-service/Controller/Dto/Response"
 )
@@ -43,7 +44,7 @@ func (p *product) CheckExistsProductId(ctx context.Context, id string) (exists b
 	return
 }
 
-func (p *product) DetailProduct(ctx context.Context, id string) (res Response.RespDetailProduct, err error) {
+func (p *product) DetailProduct(ctx context.Context, id string) (res pb.Product, err error) {
 	query := `SELECT id, title, description, price, stock FROM t_product WHERE id = ? AND stock > 0`
 	if err = Config.DATABASE_MAIN.Get().QueryRowContext(ctx, query, id).Scan(&res.Id, &res.Title, &res.Description,
 		&res.Price, &res.Stock); err != nil {

@@ -4,7 +4,12 @@ import (
 	"flag"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+	"net"
 	"product-service/Config"
+	"product-service/Controller"
+	pb "product-service/Controller/Dto/Proto"
 	logger "product-service/Logger"
 	"product-service/Routes"
 	"product-service/Services/Jwt"
@@ -41,6 +46,21 @@ func AppInitialization() {
 	if err != nil {
 		panic(err)
 	}
+
+	//grpc
+	listen, err := net.Listen("tcp", ":1200")
+	if err != nil {
+		log.Error(err.Error(), zap.String("_grpc_connect", err.Error()))
+	}
+
+	grpcServer := grpc.NewServer()
+	pb.RegisterDataProductServer(grpcServer, &Controller.DataProductServer{})
+
+	go func(grpcServer *grpc.Server, listen net.Listener) {
+		if err = grpcServer.Serve(listen); err != nil {
+			log.Error(err.Error(), zap.String("_grpc_connect", err.Error()))
+		}
+	}(grpcServer, listen)
 
 	//Collect Routes
 	var routes Routes.Routes

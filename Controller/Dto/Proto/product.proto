@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package Proto;
+
+option go_package = "./Proto";
+
+service DataProduct {
+  rpc DetailProductGrpc(Product) returns (Product);
+}
+
+message Product {
+  string Id = 1;
+  string Title = 2;
+  string Description = 3;
+  float Price = 4;
+  int32 Stock = 5;
+}
+
+message ProductPage {
+  repeated Product List = 1;
+  int32 Page = 2;
+  int64 TotalData = 3;
+}

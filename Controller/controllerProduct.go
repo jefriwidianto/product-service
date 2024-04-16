@@ -1,10 +1,12 @@
 package Controller
 
 import (
+	"context"
 	"errors"
 	"github.com/labstack/echo"
 	"go.uber.org/zap"
 	"net/http"
+	pb "product-service/Controller/Dto/Proto"
 	"product-service/Controller/Dto/Response"
 	"product-service/Repository"
 	"product-service/Utils"
@@ -67,4 +69,23 @@ func (c Controller) DetailProduct(ctx echo.Context) (err error) {
 		Data:    data,
 		Message: http.StatusText(http.StatusOK),
 	})
+}
+
+func (c *DataProductServer) DetailProductGrpc(ctx context.Context, product *pb.Product) (*pb.Product, error) {
+	productId := product.Id
+	exists, err := Repository.ApplicationRepository.Product.CheckExistsProductId(ctx, productId)
+	if err != nil {
+		return nil, err
+	}
+
+	if !exists {
+		return nil, errors.New("Invalid product id")
+	}
+
+	data, err := Repository.ApplicationRepository.Product.DetailProduct(ctx, productId)
+	if err != nil {
+		return nil, err
+	}
+
+	return &data, nil
 }
