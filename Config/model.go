@@ -18,6 +18,7 @@ type Environment struct {
 	App       app      `yaml:"apps"`
 	Databases database `yaml:"databases"`
 	Jwt       Jwt      `yaml:"jwt"`
+	Grpc      Grpc     `yaml:"grpc"`
 }
 
 type database struct {
@@ -37,4 +38,9 @@ type app struct {
 type Jwt struct {
 	SecretKey string `yaml:"secret_key"`
 	Encrypt   string `yaml:"encrypt"`
+}
+
+type Grpc struct {
+	Host string `yaml:"host"`
+	Port string `yaml:"port"`
 }

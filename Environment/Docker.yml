@@ -11,3 +11,6 @@ databases:
 jwt:
   secret_key: "1a8c926a-35d3-451f-99c2-964cf0666d65"
   encrypt: "HS256"
+grpc:
+  host: "0.0.0.0"
+  port: "1200"

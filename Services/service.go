@@ -2,6 +2,7 @@ package Services
 
 import (
 	"flag"
+	"fmt"
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo"
 	"go.uber.org/zap"
@@ -48,7 +49,7 @@ func AppInitialization() {
 	}
 
 	//grpc
-	listen, err := net.Listen("tcp", ":1200")
+	listen, err := net.Listen("tcp", fmt.Sprintf("%s:%s", config.Grpc.Host, config.Grpc.Port))
 	if err != nil {
 		log.Error(err.Error(), zap.String("_grpc_connect", err.Error()))
 	}

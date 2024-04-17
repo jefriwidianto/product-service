@@ -15,6 +15,7 @@ services:
     image: diksha_product_service
     ports:
       - 4000:4000
+      - 1200:1200
     depends_on:
       - mysql_product
     restart: on-failure
